@@ -1,8 +1,22 @@
 from flask import Flask, render_template, jsonify
+from dotenv import load_dotenv
 import json
 import os
 import random 
+
+
+# Load environment variables from .env file
+load_dotenv()
+
+
 app = Flask(__name__)
+
+# Security — secret key from environment variable
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+
+if not app.config['SECRET_KEY']:
+    raise RuntimeError("SECRET_KEY environment variable is not set.")
+
 
 # --helper ---------
 
