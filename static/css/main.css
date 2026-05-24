@@ -1,0 +1,273 @@
+/* ── design tokens ──────────────────────────────────── */
+:root {
+    --color-void:    #1A1A1A;
+    --color-flame:   #C8102E;
+    --color-forest:  #2E7D32;
+    --color-gold:    #D4A017;
+    --color-linen:   #F5F0E8;
+    --color-surface: #242424;
+    --color-muted:   #888888;
+    --color-border:  #333333;
+
+    --font-main: 'Inter', sans-serif;
+
+    --radius-sm:  8px;
+    --radius-md:  12px;
+    --radius-lg:  16px;
+
+    --space-xs:  4px;
+    --space-sm:  8px;
+    --space-md:  16px;
+    --space-lg:  24px;
+    --space-xl:  40px;
+}
+
+/* ── reset ──────────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--color-void);
+    color: var(--color-linen);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* ── navbar ─────────────────────────────────────────── */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-xl);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.nav-logo {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-linen);
+    letter-spacing: 0.02em;
+}
+
+.nav-logo span {
+    color: var(--color-gold);
+}
+
+.nav-links {
+    display: flex;
+    gap: var(--space-lg);
+}
+
+.nav-link {
+    font-size: 14px;
+    color: var(--color-muted);
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: var(--color-gold);
+}
+
+/* ── main content ───────────────────────────────────── */
+.main-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-lg);
+}
+
+/* ── buttons ────────────────────────────────────────── */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    font-family: var(--font-main);
+    transition: opacity 0.2s;
+}
+
+.btn:hover {
+    opacity: 0.85;
+}
+
+.btn-primary {
+    background: var(--color-linen);
+    color: var(--color-void);
+}
+
+.btn-accent {
+    background: var(--color-flame);
+    color: var(--color-linen);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--color-linen);
+    border: 1.5px solid var(--color-border);
+}
+
+/* ── badges ─────────────────────────────────────────── */
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.badge-green {
+    background: #1B3A1B;
+    color: #81C784;
+}
+
+.badge-gold {
+    background: #3D2B00;
+    color: #FFD54F;
+}
+
+
+
+/* ── hero ───────────────────────────────────────────── */
+.hero {
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.hero-eyebrow {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-gold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-sm);
+}
+
+.hero-title {
+    font-size: 42px;
+    font-weight: 600;
+    line-height: 1.15;
+    margin-bottom: var(--space-md);
+    color: var(--color-linen);
+}
+
+.hero-subtitle {
+    font-size: 16px;
+    color: var(--color-muted);
+    max-width: 480px;
+    line-height: 1.7;
+}
+
+/* ── lessons grid ───────────────────────────────────── */
+.section-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--color-muted);
+    margin-bottom: var(--space-lg);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.lessons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-md);
+}
+
+.lesson-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    transition: border-color 0.2s;
+}
+
+.lesson-card:hover {
+    border-color: var(--color-gold);
+}
+
+.lesson-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.lesson-word-count {
+    font-size: 12px;
+    color: var(--color-muted);
+}
+
+.lesson-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-linen);
+    margin-top: var(--space-xs);
+}
+
+.lesson-description {
+    font-size: 14px;
+    color: var(--color-muted);
+    line-height: 1.6;
+    flex: 1;
+}
+
+.lesson-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border);
+}
+
+.lesson-theme {
+    font-size: 12px;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 13px;
+}
+
+/* ── completion state ───────────────────────────────── */
+.lesson-card-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.completion-badge {
+    font-size: 11px;
+    font-weight: 500;
+    color: #81C784;
+    letter-spacing: 0.04em;
+}
+
+.completion-badge.hidden {
+    display: none;
+}
+
+.lesson-card-complete {
+    border-color: #2E7D32;
+    opacity: 0.85;
+}

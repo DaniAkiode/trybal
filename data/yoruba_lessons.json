@@ -1,0 +1,32 @@
+{
+  "language": "Yoruba",
+  "lessons": [
+    {
+      "id": 1,
+      "title": "Who we are",
+      "description": "Explore the Yoruba ideals of character, virtue, and what it means to live well.",
+      "theme": "ethics",
+      "difficulty": "beginner",
+      "order": 1,
+      "word_ids": [3, 5, 6]
+    },
+    {
+      "id": 2,
+      "title": "Roots and spirit",
+      "description": "Explore the Yoruba ancestral roots and spiritual connections.",
+      "theme": "cosmology and ancestry",
+      "difficulty": "beginner",
+      "order": 2,
+      "word_ids": [4, 7, 9, 10]
+    },
+    {
+      "id": 3,
+      "title": "We, not I",
+      "description": "Discover how Yoruba culture places community, family, and belonging at the centre of identity.",
+      "theme": "community",
+      "difficulty": "beginner",
+      "order": 3,
+      "word_ids": [1, 2, 8]
+    }
+  ]
+}

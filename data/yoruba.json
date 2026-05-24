@@ -1,0 +1,77 @@
+{
+    "language": "Yoruba",
+    "code": "yo",
+    "words": [
+    {
+        "id": 1,
+        "word": "Ẹ káàbọ̀",
+        "translation": "Welcome",
+        "pronunciation": "eh-KAH-boh",
+        "cultural_note": "This phrase carries deep meaning in Yoruba culture — welcoming someone into your space is considered a sacred act of hospitality, not just a polite greeting."
+    },
+    {   
+        "id": 2,
+        "word": "Àṣà",
+        "translation": "Culture / tradition",
+        "pronunciation": "AH-sha",
+        "cultural_note": "Àṣà is one of the most important concepts in Yoruba life. It refers not just to customs but to the inherited wisdom passed from ancestors to living people."
+    },
+    {   
+        "id": 3,
+        "word": "Ìwà",
+        "translation": "Good character / virtue",
+        "pronunciation": "EE-wah",
+        "cultural_note": "The most important human quality in Yoruba ethics. Ìwà pẹ̀lẹ́ (gentle character) is the highest ideal — above wealth or beauty"
+    },
+    {   
+        "id": 4,
+        "word": "Orí",
+        "translation": "Destiny / personal path",
+        "pronunciation": "OH-ree",
+        "cultural_note": "Literally 'head,' but refers to your spiritual destiny chosen before birth. Your Orí is your inner guide and protector."
+    },
+    {   
+        "id": 5,
+        "word": "Àṣẹ",
+        "translation": "Divine energy in all things",
+        "pronunciation": "AH-sheh",
+        "cultural_note": "Often translated as 'power' or 'so be it,' but it means the life force running through everything — people, words, nature. Speaking something with àṣẹ makes it real."
+    },
+    {   
+        "id": 6,
+        "word": "Ọmọlúwàbí",
+        "translation": "Person of integrity",
+        "pronunciation": "oh-moh-loo-WAH-bee",
+        "cultural_note": "The highest compliment in Yoruba society — a person of good breeding, moral depth, and dignity; being called this by an elder is worth more than any title."
+    },
+    {   
+        "id": 7,
+        "word": "Egúngún",
+        "translation": "Ancestral masquerade",
+        "pronunciation": "eh-GOON-goon",
+        "cultural_note": "The costumed embodiment of returned ancestors during festivals — not a symbol but a living presence, believed to genuinely cross the boundary between the dead and the living."
+    },
+    {   
+        "id": 8,
+        "word": "Ẹbí",
+        "translation": "Family / kinship",
+        "pronunciation": "EH-bee",
+        "cultural_note": "Extends far beyond the nuclear family to encompass all who claim you — your safety net, your identity, and your obligation; in Yoruba life, you are never truly alone if you have ẹbí."
+    },
+    {   
+        "id": 9,
+        "word": "Ifá",
+        "translation": "Sacred wisdom / divination",
+        "pronunciation": "EE-fah",
+        "cultural_note": "A vast oral corpus of poetry, history, ethics, and medicine consulted through divination — so significant UNESCO recognised it as intangible cultural heritage of humanity in 2005."
+    },
+    {   
+        "id": 10,
+        "word": "Olódùmarè",
+        "translation": "Supreme God",
+        "pronunciation": "oh-LOH-doo-mah-REH",
+        "cultural_note": "The distant, perfect creator in Yoruba cosmology — too vast for direct approach, which is why the Òrìṣà (deities) exist as intermediaries between humans and the divine."
+    }
+]
+
+}

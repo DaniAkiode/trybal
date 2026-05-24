@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz — {{ lesson.title }} — Trybal{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="quiz-header">
+    <a href="/" class="back-link">← Back to lessons</a>
+    <div class="quiz-meta">
+        <span class="badge badge-gold">Quiz</span>
+        <span class="quiz-meta-title">{{ lesson.title }}</span>
+    </div>
+    <div class="lesson-progress-bar">
+        <div class="lesson-progress-fill" id="progressFill"></div>
+    </div>
+    <p class="lesson-progress-text" id="progressText">
+        Question 1 of {{ questions|length }}
+    </p>
+</div>
+
+<div id="quizStage">
+    {% for q in questions %}
+    {% set qindex = loop.index0 %}
+    <div class="question-card {% if not loop.first %}hidden{% endif %}"
+         data-index="{{ qindex }}">
+
+        <!-- Cultural note stored here safely, read by JavaScript -->
+        <div class="cultural-note-data" hidden>{{ q.cultural_note }}</div>
+
+        <div class="question-prompt">
+            <p class="question-label">What does this mean?</p>
+            <h1 class="question-word">{{ q.word }}</h1>
+            <p class="question-pronunciation">{{ q.pronunciation }}</p>
+        </div>
+
+        <div class="choices" id="choices-{{ qindex }}">
+            {% for choice in q.choices %}
+            <button
+                class="choice-btn"
+                data-choice="{{ choice }}"
+                data-index="{{ qindex }}"
+                data-correct="{{ q.correct }}"
+                onclick="handleAnswer(this)"
+            >
+                {{ choice }}
+            </button>
+            {% endfor %}
+        </div>
+
+        <div class="answer-feedback hidden" id="feedback-{{ qindex }}">
+            <div class="feedback-result" id="result-{{ qindex }}"></div>
+            <div class="cultural-note">
+                <p class="cultural-note-label">Cultural context</p>
+                <p class="cultural-note-text" id="note-{{ qindex }}"></p>
+            </div>
+            <button class="btn btn-primary"
+                    data-current="{{ qindex }}"
+                    data-total="{{ questions|length }}"
+                    data-lesson="{{ lesson.id }}"
+                    onclick="nextQuestion(this)">
+                {% if loop.last %}See results{% else %}Next question →{% endif %}
+            </button>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+
+<div class="results-screen hidden" id="resultsScreen">
+    <div class="results-content">
+        <p class="results-eyebrow">Quiz complete</p>
+        <h1 class="results-score" id="resultsScore"></h1>
+        <p class="results-message" id="resultsMessage"></p>
+        <div class="results-actions">
+            <a href="/quiz/{{ lesson.id }}" class="btn btn-outline">Try again</a>
+            <a href="/" class="btn btn-primary">Back to lessons</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+{% endblock %}

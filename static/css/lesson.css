@@ -1,0 +1,127 @@
+.lesson-header {
+    margin-bottom: var(--space-xl);
+}
+
+.back-link {
+    display: inline-block;
+    font-size: 14px;
+    color: var(--color-muted);
+    margin-bottom: var(--space-lg);
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: var(--color-gold);
+}
+
+.lesson-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.lesson-meta-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-linen);
+}
+
+.lesson-progress-bar {
+    height: 4px;
+    background: var(--color-border);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-bottom: var(--space-xs);
+}
+
+.lesson-progress-fill {
+    height: 100%;
+    background: var(--color-forest);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+    width: 0%;
+}
+
+.lesson-progress-text {
+    font-size: 12px;
+    color: var(--color-muted);
+}
+
+/* ── word card ───────────────────────────────────────── */
+.word-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    max-width: 600px;
+}
+
+.word-card.hidden {
+    display: none;
+}
+
+.word-display {
+    padding: var(--space-xl) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.word-main {
+    font-size: 56px;
+    font-weight: 600;
+    color: var(--color-linen);
+    line-height: 1.1;
+    margin-bottom: var(--space-sm);
+}
+
+.word-pronunciation {
+    font-size: 16px;
+    color: var(--color-gold);
+    letter-spacing: 0.04em;
+}
+
+.word-translation {
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.translation-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+    margin-bottom: var(--space-xs);
+}
+
+.translation-text {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--color-linen);
+}
+
+.cultural-note {
+    background: var(--color-surface);
+    border-left: 3px solid var(--color-flame);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: var(--space-md);
+}
+
+.cultural-note-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-flame);
+    margin-bottom: var(--space-xs);
+}
+
+.cultural-note-text {
+    font-size: 15px;
+    color: var(--color-linen);
+    line-height: 1.7;
+    opacity: 0.9;
+}
+
+.word-actions {
+    display: flex;
+    gap: var(--space-sm);
+    padding-top: var(--space-md);
+}

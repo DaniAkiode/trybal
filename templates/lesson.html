@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}{{ lesson.title }} — Trybal{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/lesson.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="lesson-header">
+    <a href="/" class="back-link">← Back</a>
+    <div class="lesson-meta">
+        <span class="badge badge-green">{{ lesson.difficulty }}</span>
+        <span class="lesson-meta-title">{{ lesson.title }}</span>        
+    </div>
+    <div class="lesson-progress-bar">
+        <div class="lesson-progress-fill" id="progressFill"></div>
+    </div>
+    <p class="lesson-progress-text" id="progressText">Word 1 of {{ words|length}}</p>
+</div>
+
+<div class="word-stage" id="wordStage">
+    {% for word in words %}
+    
+    <div class="word-card {% if not loop.first %}hidden{% endif %}"
+    data-index="{{ loop.index0 }}">
+        
+        <div class="word-display">
+            <h1 class="word-main">{{ word.word }}</h1>
+            <p class="word-pronuniciation">{{word.pronunciation}}</p>
+        </div>
+
+        <div class="word-translation">
+            <p class="translation-label">meaning</p>
+            <p class="translation-text">{{word.translation}}</p>
+        </div>
+
+        <div class="cultural-note">
+            <p class="cultural-note-label">Cultural context</p>
+            <p class="cultural-note-text">{{ word.cultural_note }}</p>
+        </div>
+
+        <div class="word-actions">
+            {% if loop.last %}
+                <a href="/" class="btn btn-outline">Back to lesson</a>
+                <a href="/quiz/{{ lesson.id }}" class="btn btn-accent">
+                    Take the quiz →
+                </a>
+            {% else %}
+                <button class="btn btn-primary" onclick="nextWord()">
+                    Next word →
+                </button>
+            {% endif %}
+        </div>
+
+    </div>
+
+    {% endfor %}
+    
+</div>
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/lesson.js') }}"></script>
+{% endblock %}
+
