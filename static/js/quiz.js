@@ -41,6 +41,7 @@ function handleAnswer(button) {
 
     noteEl.textContent = culturalNote;
     feedbackEl.classList.remove('hidden');
+    feedbackEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function nextQuestion(button) {
