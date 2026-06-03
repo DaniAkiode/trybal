@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome — Trybal{% endblock %}
+
+{% block content %}
+
+<div class="auth-container" style="text-align: center; padding-top: 80px;">
+    <h1 class="auth-title">Welcome, {{ current_user.username }}</h1>
+    <p class="auth-subtitle" style="margin-top: 16px;">
+        Saving your progress...
+    </p>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/migrate.js') }}"></script>
+{% endblock %}

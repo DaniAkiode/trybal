@@ -79,6 +79,17 @@
             <a href="/quiz/{{ lesson.id }}" class="btn btn-outline">Try again</a>
             <a href="/" class="btn btn-primary">Back to lessons</a>
         </div>
+
+        {% if not current_user.is_authenticated %}
+        <div class="save-progress-prompt">
+            <p class="save-progress-text">
+                Create a free account to save your progress across all your devices.
+            </p>
+            <a href="/register" class="btn btn-accent save-progress-btn">
+                Save my progress — it's free
+            </a>
+        </div>
+        {% endif %}
     </div>
 </div>
 

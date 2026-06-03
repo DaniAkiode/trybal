@@ -17,28 +17,44 @@ function isLessonComplete(lessonId) {
     return getCompletedLessons().includes(Number(lessonId));
 }
 
-function markCompletedLessonsOnScreen(){
-    const completed = getCompletedLessons();
+function markCompletedLessonsOnScreen() {
+    // Fetch from server — works for both logged in and guest users
+    fetch('/api/my-progress')
+        .then(response => response.json())
+        .then(data => {
+            const completed = data.completedLessons;
 
-    completed.forEach(lessonsId => {
-        const badge = document.getElementById(`complete-${lessonsId}`);
-        if (badge) {
-            badge.classList.remove('hidden');
-        }
+            // If guest, also merge localStorage
+            if (data.source === 'guest') {
+                const local = getCompletedLessons();
+                local.forEach(id => {
+                    if (!completed.includes(id)) completed.push(id);
+                });
+            }
 
-        // Change the Start button ro Review
-        const btn = document.getElementById(`lesson-btn-${lessonsId}`);
-        if (btn) {
-            btn.textContent = 'Review';
-            btn.classList.remove('btn-primary');
-            btn.classList.add('btn-outline');
-        }
-        const card = document.querySelector(`[data-lesson-id="${lessonsId}"]`);
-        if (card) {
-            card.classList.add('lesson-card-complete');
-        }
-    });
+            completed.forEach(lessonId => {
+                const badge = document.getElementById(`complete-${lessonId}`);
+                if (badge) badge.classList.remove('hidden');
+
+                const btn = document.getElementById(`lesson-btn-${lessonId}`);
+                if (btn) {
+                    btn.textContent = 'Review';
+                    btn.classList.remove('btn-primary');
+                    btn.classList.add('btn-outline');
+                }
+
+                const card = document.querySelector(`[data-lesson-id="${lessonId}"]`);
+                if (card) card.classList.add('lesson-card-complete');
+            });
+        })
+        .catch(() => {
+            // Fallback to localStorage if API fails
+            const completed = getCompletedLessons();
+            completed.forEach(lessonId => {
+                const badge = document.getElementById(`complete-${lessonId}`);
+                if (badge) badge.classList.remove('hidden');
+            });
+        });
 }
 
-// Run when the page loads
 document.addEventListener('DOMContentLoaded', markCompletedLessonsOnScreen);

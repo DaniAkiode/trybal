@@ -77,6 +77,12 @@ a {
     color: var(--color-gold);
 }
 
+.nav-username {
+    font-size: 14px;
+    color: var(--color-gold);
+    font-weight: 500;
+}
+
 /* ── main content ───────────────────────────────────── */
 .main-content {
     max-width: 900px;

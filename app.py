@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, session
+from flask import Flask, render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
 from dotenv import load_dotenv
@@ -24,6 +24,9 @@ from models import db, User, UserProgress, UserStreak
 
 db.init_app(app)
 
+from auth import auth as auth_blueprint
+app.register_blueprint(auth_blueprint)
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'index'
@@ -31,6 +34,10 @@ login_manager.login_view = 'index'
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+@app.context_processor
+def inject_user():
+    return dict(current_user=current_user)
 
 # ── create database tables ───────────────────────────────
 with app.app_context():
@@ -121,6 +128,18 @@ def quiz(lesson_id):
         questions=questions
     )
 
+@app.route('/api/my-progress')
+def my_progress():
+    if current_user.is_authenticated:
+        completed = UserProgress.query.filter_by(
+            user_id=current_user.id,
+            completed=True
+        ).all()
+        lesson_ids = [p.lesson_id for p in completed]
+        return jsonify({'completedLessons': lesson_ids, 'source': 'database'})
+    else:
+        completed = []
+        return jsonify({'completedLessons': completed, 'source': 'guest'})
 # ── run ──────────────────────────────────────────────────
 if __name__ == '__main__':
     app.run(debug=False)

@@ -10,12 +10,18 @@
 </head>
 <body>
     <nav class = "navbar">
-        <a href="/" class="nav-logo">Try<span>bal</span></a>
-        <div class="nav-links">
-            <a href="/" class="nav-link">Learn</a>
-            <a href="#" class="nav-link">Progress</a>
-            <a href="#" class="nav-link">Community</a>
-        </div>
+    <a href="/" class="nav-logo">Try<span>bal</span></a>
+    <div class="nav-links">
+        <a href="/" class="nav-link">Learn</a>
+        <a href="#" class="nav-link">Progress</a>
+        <a href="#" class="nav-link">Community</a>
+        {% if current_user.is_authenticated %}
+            <span class="nav-username">{{ current_user.username }}</span>
+            <a href="/logout" class="nav-link">Log out</a>
+        {% else %}
+            <a href="/login" class="nav-link">Log in</a>
+        {% endif %}
+    </div>
     </nav>
     
     <main class="main-content">

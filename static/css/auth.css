@@ -1,0 +1,109 @@
+.auth-container {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: var(--space-xl) 0;
+}
+
+.auth-header {
+    margin-bottom: var(--space-xl);
+}
+
+.auth-title {
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--color-linen);
+    margin-bottom: var(--space-sm);
+    line-height: 1.2;
+}
+
+.auth-subtitle {
+    font-size: 15px;
+    color: var(--color-muted);
+    line-height: 1.6;
+}
+
+/* ── errors ─────────────────────────────────────────── */
+.auth-errors {
+    background: #3A1B1B;
+    border: 1px solid var(--color-flame);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.auth-error-item {
+    font-size: 14px;
+    color: #FFCDD2;
+    line-height: 1.5;
+}
+
+.auth-error-item + .auth-error-item {
+    margin-top: var(--space-xs);
+}
+
+/* ── form ───────────────────────────────────────────── */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-lg);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.form-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.form-input {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    font-size: 15px;
+    color: var(--color-linen);
+    font-family: var(--font-main);
+    width: 100%;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-gold);
+}
+
+.form-input::placeholder {
+    color: var(--color-muted);
+    opacity: 0.5;
+}
+
+.auth-submit {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+}
+
+/* ── switch link ────────────────────────────────────── */
+.auth-switch {
+    font-size: 14px;
+    color: var(--color-muted);
+    text-align: center;
+}
+
+.auth-link {
+    color: var(--color-gold);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-link:hover {
+    text-decoration: underline;
+}

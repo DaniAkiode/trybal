@@ -164,3 +164,23 @@
     gap: var(--space-sm);
     justify-content: center;
 }
+
+.save-progress-prompt {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--color-border);
+    text-align: center;
+}
+
+.save-progress-text {
+    font-size: 15px;
+    color: var(--color-muted);
+    margin-bottom: var(--space-md);
+    line-height: 1.6;
+}
+
+.save-progress-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+}
