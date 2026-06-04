@@ -1,7 +1,8 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
 from dotenv import load_dotenv
+from datetime import datetime
 import json
 import os
 import random
@@ -90,7 +91,7 @@ def lessons(lesson_id):
     if current_lesson is None:
         return "Lesson not found", 404
 
-    word_ids     = current_lesson['word_ids']
+    word_ids = current_lesson['word_ids']
     lessons_words = [word for word in all_words if word['id'] in word_ids]
 
     return render_template(
@@ -101,7 +102,7 @@ def lessons(lesson_id):
 
 @app.route('/quiz/<int:lesson_id>')
 def quiz(lesson_id):
-    all_words    = load_json('yoruba.json')['words']
+    all_words = load_json('yoruba.json')['words']
     lessons_data = load_json('yoruba_lessons.json')['lessons']
 
     current_lesson = None
@@ -150,6 +151,40 @@ def my_progress():
     else:
         completed = []
         return jsonify({'completedLessons': completed, 'source': 'guest'})
+
+@app.route('/api/complete-lesson', methods=['POST'])
+def complete_lesson():
+    if not current_user.is_authenticated:
+        return jsonify({'status': 'guest'})
+
+    data = request.get_json()
+    lesson_id = data.get('lesson_id')
+    score = data.get('score', 0)
+    total = data.get('total', 0)
+
+    existing = UserProgress.query.filter_by(
+        user_id   = current_user.id,
+        lesson_id = lesson_id
+    ).first()
+
+    if existing:
+        existing.score = score
+        existing.total = total
+        existing.completed = True
+        existing.completed_at = datetime.utcnow()
+    else:
+        progress = UserProgress(
+            user_id = current_user.id,
+            lesson_id = lesson_id,
+            completed = True,
+            score = score,
+            total = total,
+            completed_at = datetime.utcnow()
+        )
+        db.session.add(progress)
+
+    db.session.commit()
+    return jsonify({'status': 'ok'})
 # ── run ──────────────────────────────────────────────────
 if __name__ == '__main__':
     app.run(debug=False)

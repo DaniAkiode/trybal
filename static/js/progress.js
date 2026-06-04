@@ -1,6 +1,14 @@
 // progress.js
 // Handles reading and writing lesson progress to localStorage
 
+// Force fresh data when user navigates back to this page
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        markCompletedLessonsOnScreen();
+    }
+});
+
+
 function getCompletedLessons() {
     return JSON.parse(localStorage.getItem('completedLessons') || '[]');
 }

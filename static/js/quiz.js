@@ -72,10 +72,8 @@ function updateProgress() {
 }
 
 function showResults(total, lessonId) {
-    // Hide the quiz stage
     document.getElementById('quizStage').classList.add('hidden');
 
-    // Save score to localStorage
     const key = 'quiz_score_lesson_' + lessonId;
     localStorage.setItem(key, JSON.stringify({
         score: score,
@@ -83,14 +81,24 @@ function showResults(total, lessonId) {
         date: new Date().toISOString()
     }));
 
-    // Mark lesson as completed
+    // Save completion to localStorage for guests
     const completed = JSON.parse(localStorage.getItem('completedLessons') || '[]');
     if (!completed.includes(lessonId)) {
         completed.push(lessonId);
         localStorage.setItem('completedLessons', JSON.stringify(completed));
     }
 
-    // Pick a results message based on score
+    // Save completion to database for logged-in users
+    fetch('/api/complete-lesson', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            lesson_id: lessonId,
+            score: score,
+            total: total
+        })
+    });
+
     const percent = Math.round((score / total) * 100);
     let message = '';
     if (percent === 100) {
@@ -103,8 +111,7 @@ function showResults(total, lessonId) {
 
     document.getElementById('resultsScore').textContent = score + ' / ' + total;
     document.getElementById('resultsMessage').textContent = message;
+    document.getElementById('resultsScreen').classList.remove('hidden');
 
-    const resultsScreen = document.getElementById('resultsScreen');
-    resultsScreen.classList.remove('hidden');
-    resultsScreen.scrollIntoView({ behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
