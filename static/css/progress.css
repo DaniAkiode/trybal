@@ -1,0 +1,127 @@
+.progress-guest {
+    max-width: 560px;
+    padding: var(--space-xl) 0;
+}
+
+.progress-header {
+    margin-bottom: var(--space-xl);
+}
+
+.progress-title {
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--color-linen);
+    margin-top: var(--space-sm);
+}
+
+/* ── stats grid ─────────────────────────────────────── */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+.stat-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 42px;
+    font-weight: 600;
+    color: var(--color-gold);
+    line-height: 1;
+    margin-bottom: var(--space-xs);
+}
+
+.stat-label {
+    font-size: 13px;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* ── progress list ──────────────────────────────────── */
+.progress-section {
+    margin-top: var(--space-xl);
+}
+
+.progress-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.progress-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md) var(--space-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+}
+
+.progress-item-left {
+    flex: 1;
+}
+
+.progress-item-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-linen);
+    margin-bottom: var(--space-xs);
+}
+
+.progress-item-meta {
+    font-size: 12px;
+    color: var(--color-muted);
+    letter-spacing: 0.04em;
+}
+
+.progress-item-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-xs);
+    min-width: 140px;
+}
+
+.score-bar-wrap {
+    width: 120px;
+    height: 6px;
+    background: var(--color-border);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.score-bar-fill {
+    height: 100%;
+    background: var(--color-forest);
+    border-radius: 99px;
+    transition: width 0.6s ease;
+}
+
+.score-text {
+    font-size: 12px;
+    color: var(--color-muted);
+}
+
+/* ── empty state ────────────────────────────────────── */
+.progress-empty {
+    text-align: center;
+    padding: var(--space-xl) 0;
+}
+
+.progress-empty-text {
+    font-size: 16px;
+    color: var(--color-muted);
+}
+
+/* Score bar widths set by JavaScript */
+.score-bar-fill { width: 0%; }

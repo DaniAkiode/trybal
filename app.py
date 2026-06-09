@@ -15,9 +15,7 @@ app = Flask(__name__)
 # ── configuration ────────────────────────────────────────
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
-import re 
-
-database_url = os.environ.get('DATABASE_URL', 'sqlite://trybal.db')
+database_url = os.environ.get('DATABASE_URL', 'sqlite:///trybal.db')
 
 # Render provides postgres:// but SQLAlchemy requires postgresql://
 if database_url.startswith('postgres://'):
@@ -185,6 +183,62 @@ def complete_lesson():
 
     db.session.commit()
     return jsonify({'status': 'ok'})
+@app.route('/progress')
+def progress():
+    if not current_user.is_authenticated:
+        return render_template('progress.html',
+                               authenticated=False,
+                               stats=None,
+                               completed_lessons=None)
+    # Get all completed lessons for this user 
+    user_progress = UserProgress.query.filter_by(
+        user_id=current_user.id,
+        completed=True
+    ).order_by(UserProgress.completed_at.desc()).all()
+
+    # Load lesson data to get titles 
+
+    lessons_data = load_json('yoruba_lessons.json')['lessons']
+    lessons_map = {l['id']: l for l in lessons_data}
+
+    # Build competed lessons list with titles and scores
+
+    completed_lessons = []
+    total_score = 0 
+    total_possible = 0
+
+    for p in user_progress:
+        lesson = lessons_map.get(p.lesson_id, {})
+        score_percent = round((p.score / p.total) * 100) if p.total > 0 else 0
+        total_score += p.score
+        total_possible += p.total
+
+        completed_lessons.append({
+            'title': lesson.get('title', 'Unknown lesson'),
+            'theme': lesson.get('theme', ''),
+            'score': p.score,
+            'total': p.total,
+            'score_percent': score_percent,
+            'completed_at': p.completed_at.strftime('%d %b %Y') if p.completed_at else ''
+        })
+
+    avg_score = round((total_score/total_possible) * 100) if total_possible > 0 else 0
+    words_learned = sum(
+        len(lessons_map[p.lesson_id]['word_ids'])
+        for p in user_progress
+        if p.lesson_id in lessons_map
+    )
+
+    stats = {
+        'lessons_completed': len(completed_lessons),
+        'words_learned': words_learned,
+        'avg_score': avg_score
+    }
+
+    return render_template('progress.html', authenticated=True, stats=stats, completed_lessons=completed_lessons)
+
+
+
 # ── run ──────────────────────────────────────────────────
 if __name__ == '__main__':
     app.run(debug=False)

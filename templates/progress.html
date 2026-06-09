@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Progress — Trybal{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/progress.css') }}">
+{% endblock %}
+
+{% block content %}
+
+{% if not authenticated %}
+
+<div class="progress-guest">
+    <p class="hero-eyebrow">Progress</p>
+    <h1 class="hero-title">Track your journey</h1>
+    <p class="hero-subtitle">
+        Create a free account to see your completed lessons,
+        quiz scores, and words learned over time.
+    </p>
+    <div style="margin-top: var(--space-xl);">
+        <a href="/register" class="btn btn-primary">Create free account</a>
+        <a href="/login" class="btn btn-outline" style="margin-left: var(--space-sm);">
+            Log in
+        </a>
+    </div>
+</div>
+
+{% else %}
+
+<div class="progress-header">
+    <p class="hero-eyebrow">Progress</p>
+    <h1 class="progress-title">{{ current_user.username }}</h1>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <p class="stat-value">{{ stats.lessons_completed }}</p>
+        <p class="stat-label">Lessons complete</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-value">{{ stats.words_learned }}</p>
+        <p class="stat-label">Words learned</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-value">{{ stats.avg_score }}%</p>
+        <p class="stat-label">Average score</p>
+    </div>
+</div>
+
+{% if completed_lessons %}
+
+<div class="progress-section">
+    <h2 class="section-title">Completed lessons</h2>
+
+    <div class="progress-list">
+        {% for lesson in completed_lessons %}
+        <div class="progress-item">
+
+            <div class="progress-item-left">
+                <p class="progress-item-title">{{ lesson.title }}</p>
+                <p class="progress-item-meta">
+                    {{ lesson.theme | upper }} · {{ lesson.completed_at }}
+                </p>
+            </div>
+
+            <div class="progress-item-right">
+                <div class="score-bar-wrap">
+                    <div class="score-bar-fill"
+                        data-percent="{{ lesson.score_percent }}">
+                    </div>
+                </div>
+                <p class="score-text">
+                    {{ lesson.score }}/{{ lesson.total }}
+                    ({{ lesson.score_percent }}%)
+                </p>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% else %}
+
+<div class="progress-empty">
+    <p class="progress-empty-text">
+        You haven't completed any lessons yet.
+    </p>
+    <a href="/" class="btn btn-primary" style="margin-top: var(--space-md);">
+        Start learning
+    </a>
+</div>
+
+{% endif %}
+
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/progress_dashboard.js') }}"></script>
+{% endblock %}
