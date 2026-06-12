@@ -277,3 +277,85 @@ a {
     border-color: #2E7D32;
     opacity: 0.85;
 }
+
+/* ── language selection ─────────────────────────────── */
+.languages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-md);
+}
+
+.language-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    transition: border-color 0.2s;
+}
+
+.language-card:hover {
+    border-color: var(--color-gold);
+}
+
+.language-card-soon {
+    opacity: 0.6;
+}
+
+.language-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.language-flag {
+    font-size: 28px;
+    line-height: 1;
+}
+
+.language-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--color-linen);
+}
+
+.language-region {
+    font-size: 13px;
+    color: var(--color-muted);
+    flex: 1;
+}
+
+.language-btn {
+    margin-top: var(--space-sm);
+    text-align: center;
+}
+
+.badge-soon {
+    background: #3D2B00;
+    color: #FFD54F;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* ── coming soon page ───────────────────────────────── */
+.coming-soon-container {
+    max-width: 520px;
+    padding: var(--space-xl) 0;
+}
+
+.coming-soon-flag {
+    font-size: 56px;
+    margin: var(--space-lg) 0 var(--space-md);
+}
+
+.coming-soon-region {
+    font-size: 14px;
+    color: var(--color-muted);
+    margin-top: var(--space-sm);
+}

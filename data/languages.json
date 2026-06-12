@@ -1,0 +1,31 @@
+{
+  "languages": [
+    {
+      "code": "yoruba",
+      "name": "Yoruba",
+      "region": "Nigeria, Benin, Togo",
+      "flag": "🇳🇬",
+      "lessons_file": "yoruba_lessons.json",
+      "words_file": "yoruba.json",
+      "available": true
+    },
+    {
+      "code": "igbo",
+      "name": "Igbo",
+      "region": "Nigeria",
+      "flag": "🇳🇬",
+      "lessons_file": "igbo_lessons.json",
+      "words_file": "igbo.json",
+      "available": false
+    },
+    {
+      "code": "swahili",
+      "name": "Swahili",
+      "region": "East Africa",
+      "flag": "🌍",
+      "lessons_file": "swahili_lessons.json",
+      "words_file": "swahili.json",
+      "available": false
+    }
+  ]
+}

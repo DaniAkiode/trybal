@@ -9,7 +9,7 @@
 {% block content %}
 
 <div class="lesson-header">
-    <a href="/" class="back-link">← Back</a>
+    <a href="/{{ language.code }}" class="back-link">← Back to lessons</a>
     <div class="lesson-meta">
         <span class="badge badge-green">{{ lesson.difficulty }}</span>
         <span class="lesson-meta-title">{{ lesson.title }}</span>        
@@ -44,7 +44,7 @@
         <div class="word-actions">
             {% if loop.last %}
                 <a href="/" class="btn btn-outline">Back to lesson</a>
-                <a href="/quiz/{{ lesson.id }}" class="btn btn-accent">
+                <a href="/{{ language.code }}/quiz/{{ lesson.id }}" class="btn btn-accent">
                     Take the quiz →
                 </a>
             {% else %}

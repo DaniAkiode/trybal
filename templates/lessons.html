@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}{{ language.name }} — Trybal{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <a href="/" class="back-link">← All languages</a>
+    <p class="hero-eyebrow">{{ language.flag }} {{ language.name }} · {{ language.region }}</p>
+    <h1 class="hero-title">Learn with pride.<br>Speak with purpose.</h1>
+    <p class="hero-subtitle">
+        Rediscover the languages your ancestors spoke —
+        through culture, story, and meaning.
+    </p>
+</section>
+
+<section class="lessons-section">
+    <h2 class="section-title">Your lessons</h2>
+
+    <div class="lessons-grid">
+        {% for lesson in lessons %}
+        <div class="lesson-card" data-lesson-id="{{ lesson.id }}">
+
+            <div class="lesson-card-header">
+                <span class="badge badge-green">{{ lesson.difficulty }}</span>
+                <div class="lesson-card-right">
+                    <span class="completion-badge hidden" id="complete-{{ lesson.id }}">
+                        ✓ Complete
+                    </span>
+                    <span class="lesson-word-count">{{ lesson.word_ids | length }} words</span>
+                </div>
+            </div>
+
+            <h3 class="lesson-title">{{ lesson.title }}</h3>
+            <p class="lesson-description">{{ lesson.description }}</p>
+
+            <div class="lesson-card-footer">
+                <span class="lesson-theme">{{ lesson.theme }}</span>
+                <a href="/{{ language.code }}/lesson/{{ lesson.id }}"
+                   class="btn btn-primary btn-sm"
+                   id="lesson-btn-{{ lesson.id }}">
+                    Start
+                </a>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

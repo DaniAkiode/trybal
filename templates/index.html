@@ -5,7 +5,7 @@
 {% block content %}
 
 <section class="hero">
-    <p class="hero-eyebrow">Yoruba · Nigeria</p>
+    <p class="hero-eyebrow">African languages · Modern learning</p>
     <h1 class="hero-title">Learn with pride.<br>Speak with purpose.</h1>
     <p class="hero-subtitle">
         Rediscover the languages your ancestors spoke —
@@ -13,36 +13,36 @@
     </p>
 </section>
 
-<section class="lessons-section">
-    <h2 class="section-title">Your lessons</h2>
-    <div class="lessons-grid">
-    {% for lesson in lessons %}
-        <div class="lesson-card" data-lesson-id="{{ lesson.id }}">
+<section class="languages-section">
+    <h2 class="section-title">Choose a language</h2>
 
-            <div class="lesson-card-header">
-                <span class="badge badge-green">{{ lesson.difficulty }}</span>
-                <div class="lesson-card-right">
-                    <span class="completion-badge hidden" id="complete-{{ lesson.id }}">
-                        ✓ Complete
-                    </span>
-                    <span class="lesson-word-count">{{ lesson.word_ids | length }} words</span>
-                </div>
+    <div class="languages-grid">
+        {% for lang in languages %}
+        <div class="language-card {% if not lang.available %}language-card-soon{% endif %}">
+
+            <div class="language-card-header">
+                <span class="language-flag">{{ lang.flag }}</span>
+                {% if not lang.available %}
+                <span class="badge badge-soon">Coming soon</span>
+                {% endif %}
             </div>
 
-            <h3 class="lesson-title">{{ lesson.title }}</h3>
-            <p class="lesson-description">{{ lesson.description }}</p>
+            <h3 class="language-name">{{ lang.name }}</h3>
+            <p class="language-region">{{ lang.region }}</p>
 
-            <div class="lesson-card-footer">
-                <span class="lesson-theme">{{ lesson.theme }}</span>
-                <a href="/lesson/{{ lesson.id }}" class="btn btn-primary btn-sm" id="lesson-btn-{{ lesson.id }}">
-                    Start
-                </a>
-            </div>
+            {% if lang.available %}
+            <a href="/{{ lang.code }}" class="btn btn-primary btn-sm language-btn">
+                Start learning
+            </a>
+            {% else %}
+            <button class="btn btn-outline btn-sm language-btn" disabled>
+                Coming soon
+            </button>
+            {% endif %}
 
         </div>
-    {% endfor %}
+        {% endfor %}
     </div>
-
 </section>
 
 {% endblock %}

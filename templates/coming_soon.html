@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ language.name }} — Coming soon — Trybal{% endblock %}
+
+{% block content %}
+
+<div class="coming-soon-container">
+    <a href="/" class="back-link">← All languages</a>
+    <p class="coming-soon-flag">{{ language.flag }}</p>
+    <h1 class="hero-title">{{ language.name }}</h1>
+    <p class="hero-subtitle">
+        We're building {{ language.name }} lessons with the same cultural
+        depth as our Yoruba content. Check back soon.
+    </p>
+    <p class="coming-soon-region">{{ language.region }}</p>
+    <a href="/" class="btn btn-primary" style="margin-top: var(--space-xl);">
+        Learn Yoruba in the meantime
+    </a>
+</div>
+
+{% endblock %}

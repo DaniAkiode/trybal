@@ -9,7 +9,7 @@
 {% block content %}
 
 <div class="quiz-header">
-    <a href="/" class="back-link">← Back to lessons</a>
+    <a href="/{{ language.code }}" class="back-link">← Back to lessons</a>
     <div class="quiz-meta">
         <span class="badge badge-gold">Quiz</span>
         <span class="quiz-meta-title">{{ lesson.title }}</span>
@@ -76,8 +76,8 @@
         <h1 class="results-score" id="resultsScore"></h1>
         <p class="results-message" id="resultsMessage"></p>
         <div class="results-actions">
-            <a href="/quiz/{{ lesson.id }}" class="btn btn-outline">Try again</a>
-            <a href="/" class="btn btn-primary">Back to lessons</a>
+            <a href="/{{ language.code }}/quiz/{{ lesson.id }}" class="btn btn-outline">Try again</a>
+            <a href="/{{ language.code }}" class="btn btn-primary">Back to lessons</a>
         </div>
 
         {% if not current_user.is_authenticated %}

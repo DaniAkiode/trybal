@@ -7,30 +7,23 @@ import json
 import os
 import random
 
-# Load environment variables
 load_dotenv()
 
 app = Flask(__name__)
 
-# ── configuration ────────────────────────────────────────
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 database_url = os.environ.get('DATABASE_URL', 'sqlite:///trybal.db')
-
-# Render provides postgres:// but SQLAlchemy requires postgresql://
 if database_url.startswith('postgres://'):
     database_url = database_url.replace('postgres://', 'postgresql://', 1)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 if not app.config['SECRET_KEY']:
     raise RuntimeError("SECRET_KEY environment variable is not set.")
 
-# ── initialise extensions ────────────────────────────────
 from models import db, User, UserProgress, UserStreak
-
 db.init_app(app)
 
 from auth import auth as auth_blueprint
@@ -48,37 +41,50 @@ def load_user(user_id):
 def inject_user():
     return dict(current_user=current_user)
 
-# ── create database tables ───────────────────────────────
 with app.app_context():
     db.create_all()
 
-# ── helper ───────────────────────────────────────────────
 def load_json(filename):
-    """Load a JSON file from the data/ folder."""
     path = os.path.join(os.path.dirname(__file__), 'data', filename)
     with open(path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
-# ── routes ───────────────────────────────────────────────
+def get_language(code):
+    languages = load_json('languages.json')['languages']
+    for lang in languages:
+        if lang['code'] == code:
+            return lang
+    return None
+
+# ── home — language selection ────────────────────────
 @app.route('/')
 def index():
-    lessons_data = load_json('yoruba_lessons.json')
-    return render_template('index.html', lessons=lessons_data['lessons'])
+    languages = load_json('languages.json')['languages']
+    return render_template('index.html', languages=languages)
 
-@app.route('/api/words')
-def get_words():
-    words_data = load_json('yoruba.json')
-    return jsonify(words_data['words'])
+# ── language home — lessons for a language ───────────
+@app.route('/<language_code>')
+def language_home(language_code):
+    lang = get_language(language_code)
+    if not lang:
+        return "Language not found", 404
+    if not lang['available']:
+        return render_template('coming_soon.html', language=lang)
 
-@app.route('/api/lessons')
-def get_lessons():
-    lessons_data = load_json('yoruba_lessons.json')
-    return jsonify(lessons_data['lessons'])
+    lessons_data = load_json(lang['lessons_file'])
+    return render_template('lessons.html',
+                           language=lang,
+                           lessons=lessons_data['lessons'])
 
-@app.route('/lesson/<int:lesson_id>')
-def lessons(lesson_id):
-    all_words    = load_json('yoruba.json')['words']
-    lessons_data = load_json('yoruba_lessons.json')['lessons']
+# ── lesson ───────────────────────────────────────────
+@app.route('/<language_code>/lesson/<int:lesson_id>')
+def lesson(language_code, lesson_id):
+    lang = get_language(language_code)
+    if not lang or not lang['available']:
+        return "Not found", 404
+
+    all_words    = load_json(lang['words_file'])['words']
+    lessons_data = load_json(lang['lessons_file'])['lessons']
 
     current_lesson = None
     for l in lessons_data:
@@ -89,19 +95,23 @@ def lessons(lesson_id):
     if current_lesson is None:
         return "Lesson not found", 404
 
-    word_ids = current_lesson['word_ids']
-    lessons_words = [word for word in all_words if word['id'] in word_ids]
+    word_ids     = current_lesson['word_ids']
+    lesson_words = [w for w in all_words if w['id'] in word_ids]
 
-    return render_template(
-        'lesson.html',
-        lesson=current_lesson,
-        words=lessons_words
-    )
+    return render_template('lesson.html',
+                           language=lang,
+                           lesson=current_lesson,
+                           words=lesson_words)
 
-@app.route('/quiz/<int:lesson_id>')
-def quiz(lesson_id):
-    all_words = load_json('yoruba.json')['words']
-    lessons_data = load_json('yoruba_lessons.json')['lessons']
+# ── quiz ─────────────────────────────────────────────
+@app.route('/<language_code>/quiz/<int:lesson_id>')
+def quiz(language_code, lesson_id):
+    lang = get_language(language_code)
+    if not lang or not lang['available']:
+        return "Not found", 404
+
+    all_words    = load_json(lang['words_file'])['words']
+    lessons_data = load_json(lang['lessons_file'])['lessons']
 
     current_lesson = None
     for l in lessons_data:
@@ -117,10 +127,10 @@ def quiz(lesson_id):
 
     questions = []
     for word in lesson_words:
-        other_words  = [w for w in all_words if w['id'] not in word_ids]
-        distractors  = random.sample(other_words, 3)
+        other_words   = [w for w in all_words if w['id'] not in word_ids]
+        distractors   = random.sample(other_words, min(3, len(other_words)))
         wrong_answers = [d['translation'] for d in distractors]
-        choices      = wrong_answers + [word['translation']]
+        choices       = wrong_answers + [word['translation']]
         random.shuffle(choices)
 
         questions.append({
@@ -131,12 +141,12 @@ def quiz(lesson_id):
             'choices':       choices
         })
 
-    return render_template(
-        'quiz.html',
-        lesson=current_lesson,
-        questions=questions
-    )
+    return render_template('quiz.html',
+                           language=lang,
+                           lesson=current_lesson,
+                           questions=questions)
 
+# ── API: my progress ─────────────────────────────────
 @app.route('/api/my-progress')
 def my_progress():
     if current_user.is_authenticated:
@@ -146,43 +156,61 @@ def my_progress():
         ).all()
         lesson_ids = [p.lesson_id for p in completed]
         return jsonify({'completedLessons': lesson_ids, 'source': 'database'})
-    else:
-        completed = []
-        return jsonify({'completedLessons': completed, 'source': 'guest'})
+    return jsonify({'completedLessons': [], 'source': 'guest'})
 
+# ── API: complete lesson ──────────────────────────────
 @app.route('/api/complete-lesson', methods=['POST'])
 def complete_lesson():
     if not current_user.is_authenticated:
         return jsonify({'status': 'guest'})
 
-    data = request.get_json()
+    data      = request.get_json()
     lesson_id = data.get('lesson_id')
-    score = data.get('score', 0)
-    total = data.get('total', 0)
+    score     = data.get('score', 0)
+    total     = data.get('total', 0)
 
     existing = UserProgress.query.filter_by(
-        user_id   = current_user.id,
-        lesson_id = lesson_id
+        user_id=current_user.id,
+        lesson_id=lesson_id
     ).first()
 
     if existing:
-        existing.score = score
-        existing.total = total
-        existing.completed = True
+        existing.score        = score
+        existing.total        = total
+        existing.completed    = True
         existing.completed_at = datetime.utcnow()
     else:
         progress = UserProgress(
-            user_id = current_user.id,
-            lesson_id = lesson_id,
-            completed = True,
-            score = score,
-            total = total,
+            user_id      = current_user.id,
+            lesson_id    = lesson_id,
+            completed    = True,
+            score        = score,
+            total        = total,
             completed_at = datetime.utcnow()
         )
         db.session.add(progress)
 
     db.session.commit()
     return jsonify({'status': 'ok'})
+
+# ── API: words and lessons ────────────────────────────
+@app.route('/api/<language_code>/words')
+def get_words(language_code):
+    lang = get_language(language_code)
+    if not lang:
+        return jsonify({'error': 'Language not found'}), 404
+    words_data = load_json(lang['words_file'])
+    return jsonify(words_data['words'])
+
+@app.route('/api/<language_code>/lessons')
+def get_lessons(language_code):
+    lang = get_language(language_code)
+    if not lang:
+        return jsonify({'error': 'Language not found'}), 404
+    lessons_data = load_json(lang['lessons_file'])
+    return jsonify(lessons_data['lessons'])
+
+# ── progress dashboard ────────────────────────────────
 @app.route('/progress')
 def progress():
     if not current_user.is_authenticated:
@@ -190,39 +218,35 @@ def progress():
                                authenticated=False,
                                stats=None,
                                completed_lessons=None)
-    # Get all completed lessons for this user 
+
     user_progress = UserProgress.query.filter_by(
         user_id=current_user.id,
         completed=True
     ).order_by(UserProgress.completed_at.desc()).all()
 
-    # Load lesson data to get titles 
-
     lessons_data = load_json('yoruba_lessons.json')['lessons']
-    lessons_map = {l['id']: l for l in lessons_data}
-
-    # Build competed lessons list with titles and scores
+    lessons_map  = {l['id']: l for l in lessons_data}
 
     completed_lessons = []
-    total_score = 0 
+    total_score    = 0
     total_possible = 0
 
     for p in user_progress:
-        lesson = lessons_map.get(p.lesson_id, {})
+        lesson        = lessons_map.get(p.lesson_id, {})
         score_percent = round((p.score / p.total) * 100) if p.total > 0 else 0
-        total_score += p.score
+        total_score   += p.score
         total_possible += p.total
 
         completed_lessons.append({
-            'title': lesson.get('title', 'Unknown lesson'),
-            'theme': lesson.get('theme', ''),
-            'score': p.score,
-            'total': p.total,
+            'title':         lesson.get('title', 'Unknown lesson'),
+            'theme':         lesson.get('theme', ''),
+            'score':         p.score,
+            'total':         p.total,
             'score_percent': score_percent,
-            'completed_at': p.completed_at.strftime('%d %b %Y') if p.completed_at else ''
+            'completed_at':  p.completed_at.strftime('%d %b %Y') if p.completed_at else ''
         })
 
-    avg_score = round((total_score/total_possible) * 100) if total_possible > 0 else 0
+    avg_score     = round((total_score / total_possible) * 100) if total_possible > 0 else 0
     words_learned = sum(
         len(lessons_map[p.lesson_id]['word_ids'])
         for p in user_progress
@@ -231,14 +255,15 @@ def progress():
 
     stats = {
         'lessons_completed': len(completed_lessons),
-        'words_learned': words_learned,
-        'avg_score': avg_score
+        'words_learned':     words_learned,
+        'avg_score':         avg_score
     }
 
-    return render_template('progress.html', authenticated=True, stats=stats, completed_lessons=completed_lessons)
+    return render_template('progress.html',
+                           authenticated=True,
+                           stats=stats,
+                           completed_lessons=completed_lessons)
 
-
-
-# ── run ──────────────────────────────────────────────────
+# ── run ───────────────────────────────────────────────
 if __name__ == '__main__':
     app.run(debug=False)
