@@ -16,7 +16,7 @@
       "flag": "🇳🇬",
       "lessons_file": "igbo_lessons.json",
       "words_file": "igbo.json",
-      "available": false
+      "available": true
     },
     {
       "code": "swahili",

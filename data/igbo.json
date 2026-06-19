@@ -1,5 +1,76 @@
 {
   "language": "Igbo",
   "code": "ig",
-  "words": []
+  "words": [
+    {
+      "id": 1,
+      "word": "Kedu",
+      "translation": "How are you",
+      "pronunciation": "KEH-doo",
+      "cultural_note": "Basic and friendly way to ask someone how they are doing this phrased is used often in everyday conversations."
+    },
+    {
+      "id": 2,
+      "word": "O di mma",
+      "translation": "It is fine / I’m fine",
+      "pronunciation": "oh-dee-mah",
+      "cultural_note": "The standard response to Kedu. In Igbo culture, wellbeing is communal — when you say you are fine, you implicitly include your household and those around you."
+    },
+    {
+      "id":3,
+      "word":"Ndeewo",
+      "translation":"Hello / Greeting",
+      "pronunciation":"n-DEH-woh",
+      "cultural_note":"This is a general greeting used to show respect. It’s polite and appropriate in most social settings."
+    },    
+    {
+      "id": 4,
+      "word": "Chi",
+      "translation": "Personal spirit / guardian destiny",
+      "pronunciation": "chee",
+      "cultural_note": "Your chi is the personal spirit guiding your unique path, chosen in agreement with you before birth. It's why so many Igbo names begin with 'Chi' — Chinwendu, Chioma — each one a small declaration of that bond."
+    },
+    {
+      "id": 5,
+      "word": "Chukwu",
+      "translation": "Supreme God",
+      "pronunciation": "choo-kwoo",
+      "cultural_note": "The Supreme Creator God, source of all chi and ultimate moral authority."
+    },
+    {
+        "id": 6,
+        "word": "Ala",
+        "translation": "Earth goddess / moral law",
+        "pronunciation": "AH-lah",
+        "cultural_note": "Also called Ani, Ala is the earth goddess who governs morality, fertility, and the harvest. Offenses against the land — incest, suicide, certain crimes — are considered offenses against Ala directly, making her the moral foundation of Igbo society."
+    },
+    {
+      "id": 7,
+      "word": "Mmuo",
+      "translation": "Spirit / ghost",
+      "pronunciation": "m'-WAW",
+      "cultural_note": "General term for spiritual beings, including ancestors, used in ceremonies and to describe the unseen world that interacts constantly with the living."
+    },
+    {
+      "id": 8,
+      "word": "Umunna",
+      "translation": "Patrilineal kinship / extended family",
+      "pronunciation": "oo-moo-NAH",
+      "cultural_note": "The patrilineal kinship network — far broader than a nuclear family — bound by mutual obligation, shared land, and collective responsibility in disputes or celebrations"
+    },
+    {
+      "id": 9,
+      "word": "Ada",
+      "translation": "First daughter",
+      "pronunciation": "AH-dah",
+      "cultural_note": "Carries specific ceremonial duties and is often seen as a stabilizing figure in the family, sometimes with authority over certain rites even above younger brothers."
+    },
+    {
+      "id": 10,
+      "word": "Okpara",
+      "translation":"First son",
+      "pronunciation":"oh-PAH-rah",
+      "cultural_note": "Also called Opara in some dialects, the first son inherits headship of the household and is responsible for continuing family rites, including ancestral worship and dispute mediation."
+    }
+  ]
 }
