@@ -25,7 +25,7 @@
       "flag": "🌍",
       "lessons_file": "swahili_lessons.json",
       "words_file": "swahili.json",
-      "available": false
+      "available": true
     }
   ]
 }

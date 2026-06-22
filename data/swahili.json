@@ -2,6 +2,78 @@
   "language": "Swahili",
   "code": "sw",
   "words": [
+    {
+      "id": 1,
+      "word": "Ubuntu",
+      "translation": "humanity",
+      "pronunciation": "oo-BOON-too",
+      "cultural_note": "Often translated as 'I am because we are' — a philosophy rooted in Southern and East African thought that places human identity in relationship, not isolation. Your worth, your existence, your wholeness only makes sense through others."  
+    },
+    {
+      "id": 2,
+      "word": "Harambee",
+      "translation": "all pull together",
+      "pronunciation": "hah-RAHM-bay",
+      "cultural_note": "Kenya's national motto, adopted at independence in 1963 by Jomo Kenyatta. It captures a philosophy of collective self-help — communities pooling resources and labour to build schools, hospitals, and homes without waiting for outside aid."
+    },
+    {
+      "id": 3,
+      "word": "Ujamaa",
+      "translation": "brotherhood",
+      "pronunciation": "oo-JAH-mah",
+      "cultural_note": "Julius Nyerere's political philosophy for post-independence Tanzania — a uniquely African socialism rooted in the extended family model, where villages would collectively own land and share its yield. More than ideology, it was an attempt to build a nation on African values rather than imported ones."
+    },
+        {
+      "id": 4,
+      "word": "Asante",
+      "translation": "Thank you",
+      "pronunciation": "Ah-SAHN-teh",
+      "cultural_note": "In Swahili culture, gratitude is expressed openly and often. Asante is used freely across all situations — responding with 'Asante sana' (thank you very much) is considered warm and respectful. Gratitude reinforces the communal bonds that hold Swahili society together."
+    },
+    {
+      "id": 5,
+      "word": "Pole",
+      "translation": "Sorry",
+      "pronunciation": "po-leh",
+      "cultural_note": "Used to express empathy, sympathy or condolences when someone is hurting. Pole is remarkably versatile — said when someone stubs their toe, loses a loved one, or faces any hardship. It signals that you see their pain and share it, however small."
+    },
+    { 
+      "id": 6,
+      "word": "Jambo",
+      "translation": "Hello",
+      "pronunciation": "JAHM-boh",
+      "cultural_note": "The most widely recognised Swahili greeting internationally, though native speakers more commonly use 'Hujambo' or 'Habari'. Jambo has become a warm, open-door greeting — the first word many visitors to East Africa learn and remember."
+    },
+    { 
+      "id": 7,
+      "word": "Karibu",
+      "translation": "welcome",
+      "pronunciation": "kah-REE-boo", 
+      "cultural_note": "More than a word — it's an ethic. In Swahili-speaking cultures, welcoming someone into your space is a moral obligation. You'll hear it at doorways, dinner tables, and entire villages. Refusing to say Karibu is considered deeply inhospitable."
+    },
+    { 
+      "id": 8,
+      "word": "Uhuru",
+      "translation": "freedom",
+      "pronunciation": "oo-HOO-roo",
+      "cultural_note": "The Swahili word for freedom, it became the rallying cry of independence movements across East Africa in the 1960s. Uhuru Peak is the highest point of Mount Kilimanjaro — named deliberately to declare that Africa's highest summit belongs to a free people."
+    },
+    { 
+      "id": 9,
+      "word": "Familia",
+      "translation": "family",
+      "pronunciation": "fah-MEE-lee-ah",
+      "cultural_note": "Borrowed from Portuguese via centuries of Indian Ocean trade, Familia in Swahili culture extends well beyond blood relatives to include neighbours, community elders, and lifelong friends — reflecting how coastal Swahili society was built through trade, intermarriage, and shared belonging."
+    },
+    { 
+      "id": 10,
+      "word": "Roho",
+      "translation": "spirit",
+      "pronunciation": "roh-hoh",
+      "cultural_note": "Roho refers to the soul or inner spirit — the animating force that makes someone who they truly are. In Swahili expression, to say someone has roho nzuri (good spirit) is one of the deepest compliments, meaning their inner character is kind and generous."
+    }
+
     
+
   ]
 }
