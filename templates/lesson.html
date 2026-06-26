@@ -6,7 +6,13 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/lesson.css') }}">
 {% endblock %}
 
+
 {% block content %}
+
+<div id="language-data" 
+     data-language="{{ language.code }}" 
+     hidden>
+</div>
 
 <div class="lesson-header">
     <a href="/{{ language.code }}" class="back-link">← Back to lessons</a>
@@ -25,10 +31,22 @@
     
     <div class="word-card {% if not loop.first %}hidden{% endif %}"
     data-index="{{ loop.index0 }}">
-        
+
         <div class="word-display">
             <h1 class="word-main">{{ word.word }}</h1>
-            <p class="word-pronuniciation">{{word.pronunciation}}</p>
+            <div class="word-pronunciation-row">
+                <p class="word-pronunciation">{{ word.pronunciation }}</p>
+
+                <button class="speak-btn"
+                        id="speak-btn-{{ loop.index0 }}"
+                        data-word="{{ word.word }}"
+                        data-pronunciation="{{ word.pronunciation }}"
+                        data-lang-index="{{ loop.index0 }}"
+                        onclick="handleSpeak(this)"
+                        title="Hear pronunciation">
+                    ▶ Listen
+                </button>                                
+            </div>
         </div>
 
         <div class="word-translation">

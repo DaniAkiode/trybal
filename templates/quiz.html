@@ -6,7 +6,13 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
 {% endblock %}
 
+
 {% block content %}
+
+<div id="language-data" 
+     data-language="{{ language.code }}" 
+     hidden>
+</div>
 
 <div class="quiz-header">
     <a href="/{{ language.code }}" class="back-link">← Back to lessons</a>
@@ -34,7 +40,16 @@
         <div class="question-prompt">
             <p class="question-label">What does this mean?</p>
             <h1 class="question-word">{{ q.word }}</h1>
-            <p class="question-pronunciation">{{ q.pronunciation }}</p>
+            <div class="word-pronunciation-row">
+                <p class="question-pronunciation">{{ q.pronunciation }}</p>
+                <button class="speak-btn"
+                        data-word="{{ q.word }}"
+                        data-pronunciation="{{ q.pronunciation }}"
+                        onclick="handleSpeak(this)"
+                        title="Hear pronunciation">
+                    ▶ Listen
+                </button>
+            </div>
         </div>
 
         <div class="choices" id="choices-{{ qindex }}">
