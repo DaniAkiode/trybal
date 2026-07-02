@@ -184,3 +184,27 @@
     padding: 14px;
     font-size: 16px;
 }
+
+
+/* ── streak message ──────────────────────────────────── */
+.streak-message {
+    margin-top: var(--space-xl);
+    padding: var(--space-lg);
+    background: var(--color-surface);
+    border: 1px solid var(--color-gold);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.streak-message-number {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--color-gold);
+    margin-bottom: var(--space-xs);
+}
+
+.streak-message-text {
+    font-size: 14px;
+    color: var(--color-muted);
+    line-height: 1.6;
+}

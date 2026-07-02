@@ -169,6 +169,7 @@ def complete_lesson():
     score     = data.get('score', 0)
     total     = data.get('total', 0)
 
+    # ── save lesson progress ─────────────────────────
     existing = UserProgress.query.filter_by(
         user_id=current_user.id,
         lesson_id=lesson_id
@@ -190,8 +191,41 @@ def complete_lesson():
         )
         db.session.add(progress)
 
+    # ── update streak ────────────────────────────────
+    streak = UserStreak.query.filter_by(user_id=current_user.id).first()
+
+    if not streak:
+        streak = UserStreak(user_id=current_user.id)
+        db.session.add(streak)
+
+    today     = datetime.utcnow().date()
+    last_active = streak.last_active.date() if streak.last_active else None
+
+    if last_active is None:
+        # First time completing anything
+        streak.current_streak = 1
+    elif last_active == today:
+        # Already completed something today — don't double count
+        pass
+    elif (today - last_active).days == 1:
+        # Completed yesterday — keep the streak going
+        streak.current_streak += 1
+    else:
+        # Missed one or more days — reset
+        streak.current_streak = 1
+
+    # Update longest streak if current beats it
+    if streak.current_streak > streak.longest_streak:
+        streak.longest_streak = streak.current_streak
+
+    streak.last_active = datetime.utcnow()
     db.session.commit()
-    return jsonify({'status': 'ok'})
+
+    return jsonify({
+        'status':         'ok',
+        'current_streak': streak.current_streak,
+        'longest_streak': streak.longest_streak
+    })
 
 # ── API: words and lessons ────────────────────────────
 @app.route('/api/<language_code>/words')
@@ -259,10 +293,42 @@ def progress():
         'avg_score':         avg_score
     }
 
+    streak = UserStreak.query.filter_by(user_id=current_user.id).first()
+    streak_data = {
+        'current': streak.current_streak if streak else 0,
+        'longest': streak.longest_streak if streak else 0
+    }
+
     return render_template('progress.html',
                            authenticated=True,
                            stats=stats,
+                           streak=streak_data,
                            completed_lessons=completed_lessons)
+
+@app.route('/api/my-streak')
+def my_streak():
+    if not current_user.is_authenticated:
+        return jsonify({'current_streak': 0, 'longest_streak': 0})
+    
+    streak = UserStreak.query.filter_by(user_id=current_user.id).first()
+
+    if not streak:
+        return jsonify({'current_streak': 0, 'longest_streak': 0})
+    
+    # Check if streak is still active
+
+    today = datetime.utcnow().date()
+    last_active = streak.last_active.date() if streak.last_active else None 
+
+    if last_active and (today -last_active).days > 1:
+        # Streak is broken - reset it 
+        streak.current_streak = 0 
+        db.session.commit()
+    return jsonify({
+        'current_streak': streak.current_streak,
+        'longest_streak': streak.longest_streak,
+        'last_active': str(last_active) if last_active else None
+    })
 
 # ── run ───────────────────────────────────────────────
 if __name__ == '__main__':

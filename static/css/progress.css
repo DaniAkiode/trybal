@@ -125,3 +125,10 @@
 
 /* Score bar widths set by JavaScript */
 .score-bar-fill { width: 0%; }
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}

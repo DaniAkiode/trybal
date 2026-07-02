@@ -391,3 +391,9 @@ a {
     border-color: var(--color-forest);
     color: var(--color-forest);
 }
+
+.nav-streak {
+    font-size: 14px;
+    color: var(--color-gold);
+    font-weight: 500;
+}

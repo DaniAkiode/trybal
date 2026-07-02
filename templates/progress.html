@@ -45,6 +45,14 @@
         <p class="stat-value">{{ stats.avg_score }}%</p>
         <p class="stat-label">Average score</p>
     </div>
+    <div class="stat-card">
+        <p class="stat-value">{{ streak.current }}🔥</p>
+        <p class="stat-label">Day streak</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-value">{{ streak.longest }}</p>
+        <p class="stat-label">Longest streak</p>
+    </div>
 </div>
 
 {% if completed_lessons %}

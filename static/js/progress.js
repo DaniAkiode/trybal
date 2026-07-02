@@ -65,4 +65,23 @@ function markCompletedLessonsOnScreen() {
         });
 }
 
-document.addEventListener('DOMContentLoaded', markCompletedLessonsOnScreen);
+function loadNavStreak() {
+    fetch('/api/my-streak')
+        .then(response => response.json())
+        .then(data => {
+            if (data.current_streak > 0) {
+                const streakEl = document.getElementById('nav-streak');
+                const countEl  = document.getElementById('nav-streak-count');
+                if (streakEl && countEl) {
+                    countEl.textContent = data.current_streak;
+                    streakEl.style.display = 'inline';
+                }
+            }
+        })
+        .catch(() => {});
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    markCompletedLessonsOnScreen();
+    loadNavStreak();
+});

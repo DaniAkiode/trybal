@@ -97,6 +97,12 @@ function showResults(total, lessonId) {
             score: score,
             total: total
         })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.current_streak && data.current_streak > 0) {
+            showStreakMessage(data.current_streak);
+        }
     });
 
     const percent = Math.round((score / total) * 100);
@@ -114,4 +120,31 @@ function showResults(total, lessonId) {
     document.getElementById('resultsScreen').classList.remove('hidden');
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showStreakMessage(streakCount) {
+    const resultsContent = document.querySelector('.results-content');
+    if (!resultsContent) return;
+
+    const existing = document.getElementById('streak-message');
+    if (existing) existing.remove();
+
+    const streakEl = document.createElement('div')
+    streakEl.id = 'streak-message';
+    streakEl.className = 'streak-message';
+
+    const emoji = streakCount >=7 ? '🔥' : '⚡';
+    streakEl.innerHTML = `
+        <p class="streak-message-number">${emoji} ${streakCount} day streak</p>
+        <p class="streak-message-text">${getStreakMessage(streakCount)}</p>`;
+    resultsContent.appendChild(streakEl);
+}
+
+function getStreakMessage(count) {
+    if (count === 1) return "You've started your journey. Come back tomorrow to build your streak.";
+    if (count < 3)  return "Two days in. You're building a habit.";
+    if (count < 7)  return "You're on a roll. Keep going.";
+    if (count < 14) return "A full week. Your ancestors would be proud.";
+    if (count < 30) return "Two weeks strong. This is who you are now.";
+    return "A month of learning. Ìwà pẹ̀lẹ́ — gentle persistence — is the highest virtue.";
 }

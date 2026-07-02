@@ -16,6 +16,9 @@
         <a href="/progress" class="nav-link">Progress</a>
         <a href="#" class="nav-link">Community</a>
         {% if current_user.is_authenticated %}
+            <span class="nav-streak" id="nav-streak" style="display:none;">
+                🔥 <span id="nav-streak-count">0</span>
+            </span>
             <span class="nav-username">{{ current_user.username }}</span>
             <a href="/logout" class="nav-link">Log out</a>
         {% else %}
