@@ -201,7 +201,7 @@ def complete_lesson():
     today     = datetime.utcnow().date()
     last_active = streak.last_active.date() if streak.last_active else None
 
-    if last_active is None:
+    if last_active is None or streak.current_streak == 0:
         # First time completing anything
         streak.current_streak = 1
     elif last_active == today:
