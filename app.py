@@ -3,9 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
 from dotenv import load_dotenv
 from datetime import datetime
+from extensions import csrf, limiter
 import json
 import os
 import random
+
 
 load_dotenv()
 
@@ -22,6 +24,18 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 if not app.config['SECRET_KEY']:
     raise RuntimeError("SECRET_KEY environment variable is not set.")
+
+csrf.init_app(app)
+
+csrf.init_app(app)
+
+# Manually register csrf_token as a template global
+@app.context_processor
+def csrf_context():
+    from flask_wtf.csrf import generate_csrf
+    return dict(csrf_token=generate_csrf)
+
+limiter.init_app(app)
 
 from models import db, User, UserProgress, UserStreak
 db.init_app(app)
@@ -40,6 +54,12 @@ def load_user(user_id):
 @app.context_processor
 def inject_user():
     return dict(current_user=current_user)
+
+from flask_limiter.errors import RateLimitExceeded
+
+@app.errorhandler(RateLimitExceeded)
+def handle_rate_limit(e):
+    return render_template('rate_limited.html'), 429
 
 with app.app_context():
     db.create_all()
@@ -148,6 +168,7 @@ def quiz(language_code, lesson_id):
 
 # ── API: my progress ─────────────────────────────────
 @app.route('/api/my-progress')
+@csrf.exempt
 def my_progress():
     if current_user.is_authenticated:
         completed = UserProgress.query.filter_by(
@@ -160,6 +181,7 @@ def my_progress():
 
 # ── API: complete lesson ──────────────────────────────
 @app.route('/api/complete-lesson', methods=['POST'])
+@csrf.exempt
 def complete_lesson():
     if not current_user.is_authenticated:
         return jsonify({'status': 'guest'})
@@ -306,6 +328,7 @@ def progress():
                            completed_lessons=completed_lessons)
 
 @app.route('/api/my-streak')
+@csrf.exempt
 def my_streak():
     if not current_user.is_authenticated:
         return jsonify({'current_streak': 0, 'longest_streak': 0})

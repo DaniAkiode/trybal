@@ -26,6 +26,7 @@
     {% endif %}
 
     <form class = "auth-form" method="POST" action="/register">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class = "form-group">
             <label class="form-label" for="username">Username</label>
             <input 

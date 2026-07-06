@@ -2,12 +2,14 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash,
 from flask_login import login_user, logout_user, login_required, current_user
 from models import db, User, UserProgress, UserStreak
 from datetime import datetime
+from extensions import limiter, csrf
 
 auth = Blueprint('auth', __name__)
 
 # ── registration ─────────────────────────────────────────
 
 @auth.route('/register', methods=['GET', 'POST'])
+@limiter.limit("3 per minute")
 def register():
     if current_user.is_authenticated:
         print("DEBUG: User already authenticated, redirecting home")
@@ -66,6 +68,7 @@ def migrate_progress_page():
 
 # -- Login --------------
 @auth.route('/login', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -94,6 +97,7 @@ def logout():
 # --progress migration ----
 
 @auth.route('/api/migrate-progress', methods=['POST'])
+@csrf.exempt
 @login_required
 def migrate_progress():
     data = request.get_json()
