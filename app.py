@@ -21,6 +21,7 @@ if database_url.startswith('postgres://'):
 
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 #16KB max request size
 
 if not app.config['SECRET_KEY']:
     raise RuntimeError("SECRET_KEY environment variable is not set.")
@@ -54,6 +55,26 @@ def load_user(user_id):
 @app.context_processor
 def inject_user():
     return dict(current_user=current_user)
+
+@app.after_request
+def set_security_headers(response):
+    # Prevent clickjacking
+    response.headers['X-Frame-Options'] = 'DENY'
+    # Prevent MIME type sniffing
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    # Force HTTPS
+    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+    # Control what resources can be loaded
+    response.headers['Content-Security-Policy'] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline'; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "font-src 'self' https://fonts.gstatic.com; "
+        "img-src 'self' data:; "
+        "connect-src 'self';"
+    )
+    return response
+
 
 from flask_limiter.errors import RateLimitExceeded
 

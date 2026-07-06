@@ -33,6 +33,9 @@ def register():
         if User.query.filter_by(username=username).first():
             errors.append('That username is already taken.')
 
+        if password and not any(c.isdigit() for c in password):
+            errors.append('Password must contain at least one number')
+
         if errors:
             return render_template('register.html', errors=errors,
                                    username=username, email=email)
@@ -57,6 +60,7 @@ def register():
                                    errors=[str(e)],
                                    username=username, 
                                    email=email)
+    
 
     return render_template('register.html', errors=[], username='', email='')
 
@@ -85,6 +89,7 @@ def login():
         login_user(user)
         return redirect(url_for('index'))
     return render_template('login.html', error=None, email='')
+
 
 
 # ---logout-------
