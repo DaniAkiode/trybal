@@ -88,6 +88,10 @@ function showResults(total, lessonId) {
         localStorage.setItem('completedLessons', JSON.stringify(completed));
     }
 
+
+    const langData    = document.getElementById('language-data');
+    const languageCode = langData ? langData.dataset.language : 'yoruba';
+
     // Save completion to database for logged-in users
     fetch('/api/complete-lesson', {
         method: 'POST',
@@ -95,7 +99,8 @@ function showResults(total, lessonId) {
         body: JSON.stringify({
             lesson_id: lessonId,
             score: score,
-            total: total
+            total: total,
+            language_code: languageCode
         })
     })
     .then(response => response.json())

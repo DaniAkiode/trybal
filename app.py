@@ -196,10 +196,15 @@ def my_progress():
             user_id=current_user.id,
             completed=True
         ).all()
-        lesson_ids = [p.lesson_id for p in completed]
-        return jsonify({'completedLessons': lesson_ids, 'source': 'database'})
-    return jsonify({'completedLessons': [], 'source': 'guest'})
-
+        # Group by language code
+        result = {}
+        for p in completed:
+            lang = p.language_code or 'yoruba'
+            if lang not in result:
+                result[lang] = []
+            result[lang].append(p.lesson_id)
+        return jsonify({'completedByLanguage': result, 'source': 'database'})
+    return jsonify({'completedByLanguage': {}, 'source': 'guest'})
 # ── API: complete lesson ──────────────────────────────
 @app.route('/api/complete-lesson', methods=['POST'])
 @csrf.exempt
@@ -207,15 +212,16 @@ def complete_lesson():
     if not current_user.is_authenticated:
         return jsonify({'status': 'guest'})
 
-    data      = request.get_json()
-    lesson_id = data.get('lesson_id')
-    score     = data.get('score', 0)
-    total     = data.get('total', 0)
+    data          = request.get_json()
+    lesson_id     = data.get('lesson_id')
+    score         = data.get('score', 0)
+    total         = data.get('total', 0)
+    language_code = data.get('language_code', 'yoruba')
 
-    # ── save lesson progress ─────────────────────────
     existing = UserProgress.query.filter_by(
-        user_id=current_user.id,
-        lesson_id=lesson_id
+        user_id       = current_user.id,
+        lesson_id     = lesson_id,
+        language_code = language_code
     ).first()
 
     if existing:
@@ -225,39 +231,34 @@ def complete_lesson():
         existing.completed_at = datetime.utcnow()
     else:
         progress = UserProgress(
-            user_id      = current_user.id,
-            lesson_id    = lesson_id,
-            completed    = True,
-            score        = score,
-            total        = total,
-            completed_at = datetime.utcnow()
+            user_id       = current_user.id,
+            lesson_id     = lesson_id,
+            language_code = language_code,
+            completed     = True,
+            score         = score,
+            total         = total,
+            completed_at  = datetime.utcnow()
         )
         db.session.add(progress)
 
-    # ── update streak ────────────────────────────────
+    # streak update stays the same
     streak = UserStreak.query.filter_by(user_id=current_user.id).first()
-
     if not streak:
         streak = UserStreak(user_id=current_user.id)
         db.session.add(streak)
 
-    today     = datetime.utcnow().date()
+    today       = datetime.utcnow().date()
     last_active = streak.last_active.date() if streak.last_active else None
 
     if last_active is None or streak.current_streak == 0:
-        # First time completing anything
         streak.current_streak = 1
     elif last_active == today:
-        # Already completed something today — don't double count
         pass
     elif (today - last_active).days == 1:
-        # Completed yesterday — keep the streak going
         streak.current_streak += 1
     else:
-        # Missed one or more days — reset
         streak.current_streak = 1
 
-    # Update longest streak if current beats it
     if streak.current_streak > streak.longest_streak:
         streak.longest_streak = streak.current_streak
 
@@ -269,7 +270,6 @@ def complete_lesson():
         'current_streak': streak.current_streak,
         'longest_streak': streak.longest_streak
     })
-
 # ── API: words and lessons ────────────────────────────
 @app.route('/api/<language_code>/words')
 def get_words(language_code):

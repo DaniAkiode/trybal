@@ -26,18 +26,28 @@ function isLessonComplete(lessonId) {
 }
 
 function markCompletedLessonsOnScreen() {
-    // Fetch from server — works for both logged in and guest users
     fetch('/api/my-progress')
         .then(response => response.json())
         .then(data => {
-            const completed = data.completedLessons;
+            // Get current language from the page if available
+            const langData = document.getElementById('language-data');
+            const currentLang = langData ? langData.dataset.language : null;
 
-            // If guest, also merge localStorage
-            if (data.source === 'guest') {
-                const local = getCompletedLessons();
-                local.forEach(id => {
-                    if (!completed.includes(id)) completed.push(id);
-                });
+            let completed = [];
+
+            if (data.source === 'database') {
+                const byLang = data.completedByLanguage || {};
+                if (currentLang && byLang[currentLang]) {
+                    // On a language-specific page, only show that language's progress
+                    completed = byLang[currentLang];
+                } else if (!currentLang) {
+                    // On home screen, don't show any completions
+                    // (home screen shows languages, not lessons)
+                    completed = [];
+                }
+            } else {
+                // Guest — use localStorage
+                completed = getCompletedLessons();
             }
 
             completed.forEach(lessonId => {
@@ -56,7 +66,6 @@ function markCompletedLessonsOnScreen() {
             });
         })
         .catch(() => {
-            // Fallback to localStorage if API fails
             const completed = getCompletedLessons();
             completed.forEach(lessonId => {
                 const badge = document.getElementById(`complete-${lessonId}`);

@@ -34,6 +34,7 @@ class UserProgress(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     lesson_id = db.Column(db.Integer, nullable=False)
+    language_code = db.Column(db.String(20), nullable=False, default='yoruba')
     completed =db.Column(db.Boolean, default=False)
     score = db.Column(db.Integer, default=0)
     total = db.Column(db.Integer, default=0)
