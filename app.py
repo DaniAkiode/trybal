@@ -294,6 +294,7 @@ def progress():
         return render_template('progress.html',
                                authenticated=False,
                                stats=None,
+                               streak=None,
                                completed_lessons=None)
 
     user_progress = UserProgress.query.filter_by(
@@ -301,22 +302,36 @@ def progress():
         completed=True
     ).order_by(UserProgress.completed_at.desc()).all()
 
-    lessons_data = load_json('yoruba_lessons.json')['lessons']
-    lessons_map  = {l['id']: l for l in lessons_data}
+    # Load all languages and build a combined lessons map
+    languages     = load_json('languages.json')['languages']
+    all_lessons_map = {}
+
+    for lang in languages:
+        if lang['available']:
+            try:
+                lessons_data = load_json(lang['lessons_file'])['lessons']
+                for l in lessons_data:
+                    # Key by (language_code, lesson_id) tuple
+                    all_lessons_map[(lang['code'], l['id'])] = l
+            except Exception:
+                pass
 
     completed_lessons = []
     total_score    = 0
     total_possible = 0
 
     for p in user_progress:
-        lesson        = lessons_map.get(p.lesson_id, {})
-        score_percent = round((p.score / p.total) * 100) if p.total > 0 else 0
+        lang_code = p.language_code or 'yoruba'
+        lesson    = all_lessons_map.get((lang_code, p.lesson_id), {})
+
+        score_percent  = round((p.score / p.total) * 100) if p.total > 0 else 0
         total_score   += p.score
         total_possible += p.total
 
         completed_lessons.append({
             'title':         lesson.get('title', 'Unknown lesson'),
             'theme':         lesson.get('theme', ''),
+            'language':      lang_code.capitalize(),
             'score':         p.score,
             'total':         p.total,
             'score_percent': score_percent,
@@ -325,9 +340,9 @@ def progress():
 
     avg_score     = round((total_score / total_possible) * 100) if total_possible > 0 else 0
     words_learned = sum(
-        len(lessons_map[p.lesson_id]['word_ids'])
+        len(all_lessons_map[(p.language_code or 'yoruba', p.lesson_id)]['word_ids'])
         for p in user_progress
-        if p.lesson_id in lessons_map
+        if (p.language_code or 'yoruba', p.lesson_id) in all_lessons_map
     )
 
     stats = {
